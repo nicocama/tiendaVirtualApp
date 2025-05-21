@@ -85,7 +85,6 @@
                 android:layout_height="wrap_content"/>
 
         </RelativeLayout>
-
 <com.google.android.material.button.MaterialButton
     android:id="@+id/item_agregar_carrito_p"
     android:text="@string/item_agregar_carrito_p"

@@ -98,6 +98,19 @@
     <string name="btnVerificarCod">Verificar código</string>
     <string name="tvReenviarCod">¿No llegó el código?. <b>Reenviar</b></string>
 
+    <!--Detalle del producto-->
+    <string name="nombrePD">Nombre del producto</string>
+    <string name="descripcionPDTXT">Información general:</string>
+    <string name="descripcionPD">Descripción</string>
+    <string name="precioPD">00</string>
+    <string name="precioDescPD">00</string>
+    <string name="notaDescuentoPD">Ejm: 10% Desc.</string>
+
+    <string name="imagenContadorTV">1/5</string>
+
+    <!--Zoom a la imagen-->
+    <string name="cerrarZoom">Cerrar</string>
+
     <string name="txt_bienvenido">Bienvenido(a)</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

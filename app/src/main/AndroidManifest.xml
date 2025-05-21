@@ -24,6 +24,9 @@
         android:theme="@style/Theme.TiendaVirtualApp"
         tools:targetApi="31">
         <activity
+            android:name=".DetalleProducto.DetalleProductoActivity"
+            android:exported="false" />
+        <activity
             android:name=".cliente.ProductosC.ProductosCatCActivity"
             android:exported="false" />
         <activity

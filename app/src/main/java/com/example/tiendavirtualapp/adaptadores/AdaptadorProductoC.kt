@@ -1,6 +1,7 @@
 package com.example.tiendavirtualapp.adaptadores
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tiendavirtualapp.Constantes
+import com.example.tiendavirtualapp.DetalleProducto.DetalleProductoActivity
 import com.example.tiendavirtualapp.R
 import com.example.tiendavirtualapp.databinding.ItemProductoBinding
 import com.example.tiendavirtualapp.databinding.ItemProductoCBinding
@@ -78,6 +80,12 @@ class AdaptadorProductoC : RecyclerView.Adapter<AdaptadorProductoC.HolderProduct
         /*Si el precio con desc. y nota no son campos vacios*/
         if(precioDesc.isNotEmpty() && notaDesc.isNotEmpty()){
             visualizarDescuento(holder)
+        }
+
+        holder.itemView.setOnClickListener{
+            val intent = Intent(mContext, DetalleProductoActivity::class.java)
+            intent.putExtra("idProducto", modeloProducto.id)
+            mContext.startActivity(intent)
         }
 
     }

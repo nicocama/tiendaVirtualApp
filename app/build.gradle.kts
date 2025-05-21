@@ -54,7 +54,9 @@ dependencies {
     implementation(libs.glide) /*Leer imagenes*/
     implementation(libs.storage)/*Subir archivos multimedia*/
     implementation(libs.authGoogle)/*Iniciar sesión con Google*/
-    implementation(libs.ccp)/*Seleccionar nuestro código telefónico por país*/
+    implementation(libs.ccp) /*Seleccionar nuestro código telefónico por país*/
+    implementation(libs.photoView)/*Zoom imagenes apartado cliente*/
+    testImplementation(libs.junit)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
