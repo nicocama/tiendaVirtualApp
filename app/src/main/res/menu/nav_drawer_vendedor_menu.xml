@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/grupo_op"
+        android:checkableBehavior="single">
+
+        <!--Inicio-->
+        <item
+            android:id="@+id/op_inicio_v"
+            android:title="@string/op_inicio_v"
+            android:icon="@drawable/icono_inicio"/>
+
+        <!--Categorías-->
+        <item
+            android:id="@+id/op_categorias_v"
+            android:title="@string/op_categorias_v"
+            android:icon="@drawable/icono_categoria"/>
+
+        <!--Mi tienda-->
+        <item
+            android:id="@+id/op_mi_tienda_v"
+            android:title="@string/op_mi_tienda_v"
+            android:icon="@drawable/icono_store"/>
+
+        <!--Reseñas-->
+        <item
+            android:id="@+id/op_resenia_v"
+            android:title="@string/op_resenia_v"
+            android:icon="@drawable/icono_resenia"/>
+    </group>
+
+    <item
+        android:id="@+id/op_cerrar_sesion_v"
+        android:title="@string/op_cerrar_sesion_v"
+        android:icon="@drawable/icono_exit"/>
+
+</menu>

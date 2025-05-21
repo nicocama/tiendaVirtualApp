@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--Inicio-->
+    <item
+        android:id="@+id/op_tienda_c"
+        android:title="@string/op_tienda_c"
+        android:icon="@drawable/icono_tienda"/>
+
+    <!--Inicio-->
+    <item
+        android:id="@+id/op_mis_favoritos_c"
+        android:title="@string/op_mis_favoritos_c"
+        android:icon="@drawable/icono_favoritos"/>
+
+
+    <!--Mi perfil-->
+    <item
+        android:id="@+id/op_mis_ordenes_c"
+        android:title="@string/op_mis_ordenes_c"
+        android:icon="@drawable/icono_ordenes"/>
+
+</menu>

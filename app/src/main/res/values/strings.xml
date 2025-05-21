@@ -1,0 +1,104 @@
+<resources>
+    <string name="app_name">Tienda Virtual</string>
+
+    <string name="default_web_client_id">633872485935-pqqjjdssnugmmt56rhdereqd2l5jg6t2.apps.googleusercontent.com</string>
+
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close Drawer</string>
+
+    <string name="tipoVendedor">Vendedor</string>
+    <string name="tipoCliente">Cliente</string>
+
+    <!--NavigationDrawer vendedor-->
+    <string name="op_inicio_v">Inicio</string>
+    <string name="op_mi_tienda_v">Mi tienda</string>
+    <string name="op_categorias_v">Categorías</string>
+    <string name="op_resenia_v">Reseñas</string>
+    <string name="op_cerrar_sesion_v">Cerrar sesión</string>
+
+    <!--NavigationDrawer cliente-->
+    <string name="op_inicio_c">Inicio</string>
+    <string name="op_mi_perfil_c">Mi Perfil</string>
+    <string name="op_cerrar_sesion_c">Cerrar sesión</string>
+
+    <!--Bottom Navogation Bar Vendedor-->
+    <string name="op_mis_productos_v">Mis productos</string>
+    <string name="op_mis_ordenes_v">Mis órdenes</string>
+
+    <!--Bottom Navogation Bar Cliente-->
+    <string name="op_tienda_c">Tienda</string>
+    <string name="op_mis_favoritos_c">Favoritos</string>
+    <string name="op_mis_ordenes_c">Mis órdenes</string>
+
+    <!--Registro de vendedor-->
+    <string name="txtRegistroVendedor">Registro de vendedor</string>
+    <string name="etNombresV">Nombres completos</string>
+    <string name="etEmail">Email</string>
+    <string name="etPassword">Password</string>
+    <string name="etCPassword">Confirmar password</string>
+    <string name="btnRegistrarV">Registrarme</string>
+
+    <!--Registro de clientes-->
+    <string name="txtRegistroCliente">Registro de cliente</string>
+    <string name="etNombresC">Nombres completos</string>
+    <string name="btnRegistrarC">Registrarme</string>
+
+    <!--Login de vendedor-->
+    <string name="txtLoginV">Login de vendedor</string>
+    <string name="btnLoginV">Ingresar</string>
+    <string name="txtNoCuenta">¿No tienes una cuenta?</string>
+    <string name="tvRegistrarV">Registrarme</string>
+
+    <!--Login de cliente-->
+    <string name="txtLoginC">Login de cliente</string>
+    <string name="btnLoginC">Ingresar</string>
+    <string name="tvRegistrarC">Registrarme</string>
+
+
+    <!--Productos-->
+    <string name="txtAgregarProductos">Agregar Productos</string>
+    <string name="etNombresP">Nombre del producto</string>
+    <string name="etDescripcionP">Descripción del producto</string>
+    <string name="Categoria">Categoría</string>
+    <string name="etPrecioP">Precio</string>
+    <string name="txtDescuento">Descuento</string>
+    <string name="etPrecioConDescuentoP">Precio con descuento apli.</string>
+    <string name="etNotaDescuentoP">Ejm: 10% Desc.</string>
+    <string name="btnAgregarProducto">Agregar producto</string>
+
+    <!--Categoría-->
+    <string name="etCategoria">Ingrese categoría</string>
+    <string name="btnAgregarCat">Agregar categoría</string>
+
+    <!--Item de categoria - Vendedor-->
+    <string name="item_nombre_c_v">Nombre de categoría</string>
+
+    <!--Item de categoria - Cliente-->
+    <string name="item_nombre_categoria_c">Nombre de categoría</string>
+    <string name="item_ver_productos">Ver productos</string>
+
+
+    <!--Item producto - v-->
+    <string name="item_nombre_p">Nombre del producto</string>
+    <string name="item_nota_p">50% OFF</string>
+    <string name="item_precio_p">00</string>
+    <string name="item_precio_p_desc">00</string>
+
+    <!--Item producto - c-->
+    <string name="item_agregar_carrito_p">Añadir al carrito</string>
+
+
+    <string name="etBuscarProducto">Buscar producto</string>
+
+    <!--Registro con número telefónico-->
+    <string name="txtLoginTelC">Login con teléfono</string>
+    <string name="etTelefonoC">Teléfono</string>
+    <string name="btnEnviarCodigo">Enviar código</string>
+    <string name="etCodVer">Código</string>
+    <string name="btnVerificarCod">Verificar código</string>
+    <string name="tvReenviarCod">¿No llegó el código?. <b>Reenviar</b></string>
+
+    <string name="txt_bienvenido">Bienvenido(a)</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
