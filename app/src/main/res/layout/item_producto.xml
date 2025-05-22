@@ -13,6 +13,41 @@
         android:orientation="vertical"
         android:padding="7dp">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--Nota del descuento-->
+            <TextView
+                android:id="@+id/item_nota_p"
+                android:text="@string/item_nota_p"
+                android:padding="5dp"
+                android:visibility="gone"
+                android:background="@drawable/fondo_verde"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:id="@+id/Ib_editar"
+                android:padding="7dp"
+                android:src="@drawable/icono_editar"
+                android:layout_toStartOf="@id/Ib_eliminar"
+                android:background="@android:color/transparent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:id="@+id/Ib_eliminar"
+                android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
+                android:padding="7dp"
+                android:src="@drawable/icono_eliminar_producto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imagenP"
             android:layout_width="150dp"
@@ -33,43 +68,41 @@
             android:textStyle="bold"
             android:maxLines="1"/>
 
-        <!--Nota del descuento-->
+        <!--Categoría del producto-->
         <TextView
-            android:id="@+id/item_nota_p"
-            android:text="@string/item_nota_p"
+            android:id="@+id/item_categoria_p"
+            android:text="@string/item_categoria_p"
+            android:background="@drawable/fondo_plomo"
             android:padding="5dp"
-            android:background="@drawable/fondo_verde"
-            android:visibility="gone"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <!--Precio del producto-->
-        <TextView
-            android:id="@+id/item_precio_p"
-            android:text="@string/item_precio_p"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:maxLines="1"/>
+            android:layout_marginTop="5dp">
 
-        <!--Precio con descuento del producto-->
-        <TextView
-            android:id="@+id/item_precio_p_desc"
-            android:text="@string/item_precio_p_desc"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:maxLines="1"/>
+            <!--Precio con descuento del producto-->
+            <TextView
+                android:id="@+id/item_precio_p_desc"
+                android:text="@string/item_precio_p_desc"
+                android:visibility="gone"
+                android:layout_marginEnd="10dp"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
+            <!--Precio del producto-->
+            <TextView
+                android:id="@+id/item_precio_p"
+                android:text="@string/item_precio_p"
+                android:layout_toEndOf="@id/item_precio_p_desc"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-
-
-
-
-
-
+        </RelativeLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </com.google.android.material.card.MaterialCardView>

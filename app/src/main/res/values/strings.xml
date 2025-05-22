@@ -84,6 +84,7 @@
 
     <!--Item producto - v-->
     <string name="item_nombre_p">Nombre del producto</string>
+    <string name="item_categoria_p">Categoría</string>
     <string name="item_nota_p">50% OFF</string>
     <string name="item_precio_p">00</string>
     <string name="item_precio_p_desc">00</string>

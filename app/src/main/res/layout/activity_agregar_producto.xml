@@ -15,6 +15,7 @@
         android:layout_height="55dp">
 
         <TextView
+            android:id="@+id/txtAgregarProductos"
             android:text="@string/txtAgregarProductos"
             android:layout_centerInParent="true"
             android:textStyle="bold"

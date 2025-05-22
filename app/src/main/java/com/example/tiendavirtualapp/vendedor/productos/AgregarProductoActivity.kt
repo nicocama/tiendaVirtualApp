@@ -2,6 +2,7 @@ package com.example.tiendavirtualapp.vendedor.productos
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,7 @@ import com.example.tiendavirtualapp.adaptadores.AdaptadorImagenSeleccionada
 import com.example.tiendavirtualapp.databinding.ActivityAgregarProductoBinding
 import com.example.tiendavirtualapp.modelo.ModeloCategoria
 import com.example.tiendavirtualapp.modelo.ModeloImagenSeleccionada
+import com.example.tiendavirtualapp.vendedor.MainActivityVendedor
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -35,6 +37,9 @@ class AgregarProductoActivity : AppCompatActivity() {
 
     private lateinit var progressDialog: ProgressDialog
 
+    private var Edicion = false
+    private var idProducto = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAgregarProductoBinding.inflate(layoutInflater)
@@ -45,6 +50,8 @@ class AgregarProductoActivity : AppCompatActivity() {
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Espere por favor")
         progressDialog.setCanceledOnTouchOutside(false)
+
+        Edicion = intent.getBooleanExtra("Edicion", false)
 
         binding.etPorcentajeDescuentoP.visibility = View.GONE
         binding.btnCalcularPrecioDesc.visibility = View.GONE
@@ -70,6 +77,14 @@ class AgregarProductoActivity : AppCompatActivity() {
             }
         }
 
+        if (Edicion){
+            idProducto = intent.getStringExtra("idProducto") ?: ""
+            binding.txtAgregarProductos.text = "Editar producto"
+            cargarInfo()
+        }else{
+            binding.txtAgregarProductos.text = "Agregar un producto"
+        }
+
         imagenSelecArrayList = ArrayList()
 
         binding.imgAgregarProducto.setOnClickListener{
@@ -91,6 +106,53 @@ class AgregarProductoActivity : AppCompatActivity() {
 
         cargarImagenes()
 
+    }
+
+    private fun cargarInfo() {
+        var ref = FirebaseDatabase.getInstance().getReference("Productos")
+        ref.child(idProducto).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                /*Obteniendo la información de Firebase*/
+                val nombre = "${snapshot.child("nombre").value}"
+                val descripcion = "${snapshot.child("descripcion").value}"
+                val categoria = "${snapshot.child("categoria").value}"
+                val precio = "${snapshot.child("precio").value}"
+                val precioDesc = "${snapshot.child("precioDesc").value}"
+                val notaDesc = "${snapshot.child("notaDesc").value}"
+
+                /*Seteo de información*/
+                binding.etNombresP.setText(nombre)
+                binding.etDescripcion.setText(descripcion)
+                binding.Categoria.setText(categoria)
+                binding.etPrecioP.setText(precio)
+                binding.etPrecioConDescuentoP.setText(precioDesc)
+                binding.etNotaDescuentoP.setText(notaDesc)
+
+                val refImagenes = snapshot.child("Imagenes").ref
+                refImagenes.addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (ds in snapshot.children){
+                            val id = "${ds.child("id").value}"
+                            val imagenUrl = "${ds.child("imagenUrl").value}"
+
+                            val modeloImgSelec = ModeloImagenSeleccionada(
+                                id=id, imagenUri = null, imagenURL = imagenUrl, deInternet = true
+                            )
+                            imagenSelecArrayList.add(modeloImgSelec)
+                        }
+                        cargarImagenes()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     private fun calcularPrecioDesc() {
@@ -121,6 +183,7 @@ class AgregarProductoActivity : AppCompatActivity() {
     private var precioDescP = ""
     private var notaDescP = ""
     private var porcentajeDescP = ""
+
     private fun validarInfo() {
         nombreP = binding.etNombresP.text.toString().trim()
         descripcionP = binding.etDescripcion.text.toString().trim()
@@ -143,9 +206,6 @@ class AgregarProductoActivity : AppCompatActivity() {
         else if (precioP.isEmpty()){
             binding.etPrecioP.error = "Ingrese precio"
             binding.etPrecioP.requestFocus()
-        }
-        else if (imagenUri == null){
-            Toast.makeText(this, "Seleccione al menos una imagen", Toast.LENGTH_SHORT).show()
         }else{
             //Cuando descuento es true
             if (descuentoHab){
@@ -162,17 +222,58 @@ class AgregarProductoActivity : AppCompatActivity() {
                 } else if (precioDescP.isEmpty()){
                     binding.etPrecioConDescuentoP.setText("No se estableció el precio con descuento")
                 }else{
-                    agregarProducto()
+                    if (Edicion){
+                        actualizarInfo()
+                    }else{
+                        if (imagenUri == null){
+                            Toast.makeText(this, "Seleccione al menos una imagen", Toast.LENGTH_SHORT).show()
+                        }else{
+                            agregarProducto()
+                        }
+                    }
                 }
 
             }
-            //Precio con descuento
+            //Cuando descuento es falso
             else{
                 precioDescP = "0"
                 notaDescP = ""
-                agregarProducto()
+                if (Edicion){
+                    actualizarInfo()
+                }else{
+                    if(imagenUri==null){
+                        Toast.makeText(this,"Agregue al menos una imagen", Toast.LENGTH_SHORT).show()
+                    }else{
+                        agregarProducto()
+                    }
+                }
             }
         }
+    }
+
+    private fun actualizarInfo() {
+        progressDialog.setMessage("Actualizando producto")
+        progressDialog.show()
+
+        val hashMap = HashMap<String, Any>()
+        hashMap["nombre"] = "${nombreP}"
+        hashMap["descripcion"] = "${descripcionP}"
+        hashMap["categoria"] ="${categoriaP}"
+        hashMap["precio"] = "${precioP}"
+        hashMap["precioDesc"] = "${precioDescP}"
+        hashMap["notaDesc"] = "${notaDescP}"
+
+        val ref = FirebaseDatabase.getInstance().getReference("Productos")
+        ref.child(idProducto)
+            .updateChildren(hashMap)
+            .addOnSuccessListener {
+                progressDialog.dismiss()
+                subirImgsStorage(idProducto)
+            }
+            .addOnFailureListener {e->
+                progressDialog.dismiss()
+                Toast.makeText(this,"Falló la actualización debido a ${e.message}",Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun agregarProducto() {
@@ -206,37 +307,47 @@ class AgregarProductoActivity : AppCompatActivity() {
     private fun subirImgsStorage(keyId: String){
         for (i in imagenSelecArrayList.indices){
             val modeloImagenSel = imagenSelecArrayList[i]
-            val nombreImagen = modeloImagenSel.id
-            val rutaImagen = "Productos/$nombreImagen"
 
-            val storageRef = FirebaseStorage.getInstance().getReference(rutaImagen)
-            storageRef.putFile(modeloImagenSel.imageUri!!)
-                .addOnSuccessListener { taskSnapshot ->
-                    val uriTask = taskSnapshot.storage.downloadUrl
-                    while (!uriTask.isSuccessful);
-                    val urlImgCargada = uriTask.result
+            if (!modeloImagenSel.deInternet){
+                val nombreImagen = modeloImagenSel.id
+                val rutaImagen = "Productos/$nombreImagen"
 
-                    if (uriTask.isSuccessful){
-                        val hashMap = HashMap<String, Any>()
-                        hashMap["id"] = "${modeloImagenSel.id}"
-                        hashMap["imagenUrl"] = "${urlImgCargada}"
+                val storageRef = FirebaseStorage.getInstance().getReference(rutaImagen)
+                storageRef.putFile(modeloImagenSel.imagenUri!!)
+                    .addOnSuccessListener {taskSnapshot->
+                        val uriTask = taskSnapshot.storage.downloadUrl
+                        while (!uriTask.isSuccessful);
+                        val urlImgCargada = uriTask.result
 
-                        val ref = FirebaseDatabase.getInstance().getReference("Productos")
-                        ref.child(keyId).child("Imagenes")
-                            .child(nombreImagen)
-                            .updateChildren(hashMap)
-                        progressDialog.dismiss()
-                        Toast.makeText(this, "Se agregó el producto", Toast.LENGTH_SHORT).show()
-                        limpiarCampos()
+                        if (uriTask.isSuccessful){
+                            val hashMap = HashMap<String, Any>()
+                            hashMap["id"] = "${modeloImagenSel.id}"
+                            hashMap["imagenUrl"] = "${urlImgCargada}"
+
+                            val ref = FirebaseDatabase.getInstance().getReference("Productos")
+                            ref.child(keyId).child("Imagenes")
+                                .child(nombreImagen)
+                                .updateChildren(hashMap)
+
+                        }
+                        if (Edicion){
+                            progressDialog.dismiss()
+                            val intent = Intent(this@AgregarProductoActivity, MainActivityVendedor::class.java)
+                            startActivity(intent)
+                            Toast.makeText(this,"Se actualizó la información del producto",Toast.LENGTH_SHORT).show()
+                            finishAffinity()
+                        }else{
+                            progressDialog.dismiss()
+                            Toast.makeText(this, "Se agregó el producto",Toast.LENGTH_SHORT).show()
+                            limpiarCampos()
+                        }
                     }
-                }
-                .addOnFailureListener{e->
-                    progressDialog.dismiss()
-                    Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
-                }
+                    .addOnFailureListener {e->
+                        progressDialog.dismiss()
+                        Toast.makeText(this, "${e.message}",Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
-
-
     }
 
     private fun limpiarCampos() {
@@ -296,7 +407,7 @@ class AgregarProductoActivity : AppCompatActivity() {
 
 
     private fun cargarImagenes() {
-        adaptadorImagenSel = AdaptadorImagenSeleccionada(this, imagenSelecArrayList)
+        adaptadorImagenSel = AdaptadorImagenSeleccionada(this, imagenSelecArrayList, idProducto)
         binding.RVImagenesProducto.adapter = adaptadorImagenSel
     }
 

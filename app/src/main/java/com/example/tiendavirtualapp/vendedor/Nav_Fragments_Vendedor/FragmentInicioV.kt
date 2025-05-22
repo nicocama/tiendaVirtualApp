@@ -46,8 +46,9 @@ class FragmentInicioV : Fragment() {
         binding.bottomNavigation.selectedItemId = R.id.op_mis_productos_v
 
         binding.addFab.setOnClickListener {
-            startActivity(Intent(context, AgregarProductoActivity::class.java))
-
+            val intent = Intent(mContext, AgregarProductoActivity::class.java)
+            intent.putExtra("Edicion", false)
+            mContext.startActivity(intent)
         }
 
         return binding.root
