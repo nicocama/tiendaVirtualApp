@@ -1,5 +1,6 @@
 package com.example.tiendavirtualapp.adaptadores
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
@@ -8,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tiendavirtualapp.Constantes
@@ -17,6 +21,8 @@ import com.example.tiendavirtualapp.databinding.ItemProductoBinding
 import com.example.tiendavirtualapp.databinding.ItemProductoCBinding
 import com.example.tiendavirtualapp.filtro.FiltroProducto
 import com.example.tiendavirtualapp.modelo.ModeloProducto
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -87,6 +93,164 @@ class AdaptadorProductoC : RecyclerView.Adapter<AdaptadorProductoC.HolderProduct
             intent.putExtra("idProducto", modeloProducto.id)
             mContext.startActivity(intent)
         }
+
+        //Evento para agregar al carrito el producto seleccionado
+        holder.agregar_carrito.setOnClickListener {
+            verCarrito(modeloProducto)
+        }
+
+    }
+
+    var costo : Double = 0.0
+    var costoFinal : Double = 0.0
+    var cantidadProd : Int = 0
+    private fun verCarrito(modeloProducto: ModeloProducto) {
+        //Declarar vistas
+        var imagenSIV : ShapeableImageView
+        var nombreTv : TextView
+        var descripcionTv : TextView
+        var notaDescTv : TextView
+        var precioOriginalTv : TextView
+        var precioDescuentoTv : TextView
+        var precioFinalTv : TextView
+        var btnDisminuir : ImageButton
+        var cantidadTv : TextView
+        var btnAumentar : ImageButton
+        var btnAgregarCarrito : MaterialButton
+
+        val dialog = Dialog(mContext)
+        dialog.setContentView(R.layout.carrito_compras) //Hacemos la referencia a la vista (carrito de compras)
+
+        imagenSIV = dialog.findViewById(R.id.imagenPCar)
+        nombreTv = dialog.findViewById(R.id.nombrePCar)
+        descripcionTv = dialog.findViewById(R.id.descripcionPCar)
+        notaDescTv = dialog.findViewById(R.id.notaDescPCar)
+        precioOriginalTv = dialog.findViewById(R.id.precioOriginalPCar)
+        precioDescuentoTv = dialog.findViewById(R.id.precioDescPCar)
+        precioFinalTv = dialog.findViewById(R.id.precioFinalPCar)
+        btnDisminuir = dialog.findViewById(R.id.btnDisminuir)
+        cantidadTv = dialog.findViewById(R.id.cantidadPCar)
+        btnAumentar = dialog.findViewById(R.id.btnAumentar)
+        btnAgregarCarrito = dialog.findViewById(R.id.btnAgregarCarrito)
+
+        /*Obtener los datos del modelo*/
+        val productoId = modeloProducto.id
+        val nombre = modeloProducto.nombre
+        val descripcion = modeloProducto.descripcion
+        val precio = modeloProducto.precio
+        val precioDesc = modeloProducto.precioDesc
+        val notaDesc = modeloProducto.notaDesc
+
+        if (!precioDesc.equals("0") && !notaDesc.equals("")){
+            /*El producto si tiene descuento*/
+            notaDescTv.visibility = View.VISIBLE
+            precioDescuentoTv.visibility = View.VISIBLE
+
+            notaDescTv.setText(notaDesc)
+            precioDescuentoTv.setText(precioDesc.plus(" COP")) //80 COP
+            precioOriginalTv.setText(precio.plus(" COP"))
+            precioOriginalTv.paintFlags = precioOriginalTv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG //Marca como tachado
+            costo = precioDesc.toDouble() /*Precio almacena el precio con descuento*/
+        }else{
+            /*El producto no tiene descuento*/
+            precioOriginalTv.setText(precio.plus(" COP"))
+            precioOriginalTv.paintFlags = precioOriginalTv.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv() //Quitamos el tachado
+            costo = precio.toDouble() /*Precio almacena el precio original*/
+        }
+
+        /*Setear la información*/
+        nombreTv.setText(nombre)
+        descripcionTv.setText(descripcion)
+
+        costoFinal = costo
+        cantidadProd = 1
+
+        /*Incrementar cantidad*/
+        btnAumentar.setOnClickListener {
+            costoFinal = costoFinal + costo
+            cantidadProd++
+
+            precioFinalTv.text = costoFinal.toString()
+            cantidadTv.text = cantidadProd.toString()
+        }
+
+        /*Disminuir cantidad*/
+        btnDisminuir.setOnClickListener {
+            /*Disminuir sólo si la cantidad es mayor a 1*/
+            if (cantidadProd > 1){
+                costoFinal = costoFinal-costo
+                cantidadProd--
+
+                precioFinalTv.text = costoFinal.toString()
+                cantidadTv.text = cantidadProd.toString()
+            }
+        }
+
+        precioFinalTv.text = costo.toString()
+
+        /*Obtener primera imagen*/
+        cargarImg(productoId, imagenSIV)
+
+        btnAgregarCarrito.setOnClickListener {
+            agregarCarrito(mContext, modeloProducto , costoFinal , cantidadProd)
+        }
+
+        dialog.show()
+        dialog.setCanceledOnTouchOutside(true)
+
+    }
+
+    private fun agregarCarrito(mContex: Context, modeloProducto: ModeloProducto, costoFinal: Double, cantidadProd: Int) {
+
+        val firebaseAuth = FirebaseAuth.getInstance()
+
+        val hashMap = HashMap<String, Any>()
+
+        hashMap["idProducto"] = modeloProducto.id
+        hashMap["nombre"] = modeloProducto.nombre
+        hashMap["precio"] = modeloProducto.precio
+        hashMap["precioDesc"] = modeloProducto.precioDesc
+        hashMap["precioFinal"] = costoFinal.toString()
+        hashMap["cantidad"] = cantidadProd
+
+        val ref = FirebaseDatabase.getInstance().getReference("Usuarios")
+        ref.child(firebaseAuth.uid!!).child("CarritoCompras").child(modeloProducto.id)
+            .setValue(hashMap)
+            .addOnSuccessListener {
+                Toast.makeText(mContex, "Se agregó al carrito el producto", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e->
+                Toast.makeText(mContex, "${e.message}", Toast.LENGTH_SHORT).show()
+
+            }
+
+    }
+
+    private fun cargarImg(productoId: String, imagenSIV: ShapeableImageView) {
+        val ref = FirebaseDatabase.getInstance().getReference("Productos")
+        ref.child(productoId).child("Imagenes")
+            .limitToFirst(1)
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (ds in snapshot.children){
+                        //Extraer la url de la primera imagen
+                        val imagenUrl = "${ds.child("imagenUrl").value}"
+
+                        try {
+                            Glide.with(mContext)
+                                .load(imagenUrl)
+                                .placeholder(R.drawable.item_img_producto)
+                                .into(imagenSIV)
+                        }catch (e:Exception){
+
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
 
     }
 
@@ -185,6 +349,7 @@ class AdaptadorProductoC : RecyclerView.Adapter<AdaptadorProductoC.HolderProduct
         var item_precio_p_desc = binding.itemPrecioPDesc
         var item_nota_p = binding.itemNotaP
         var Ib_fav = binding.IbFav
+        var agregar_carrito = binding.itemAgregarCarritoP
     }
 
     override fun getFilter(): Filter {

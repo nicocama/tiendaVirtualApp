@@ -28,6 +28,7 @@
     <!--Bottom Navogation Bar Cliente-->
     <string name="op_tienda_c">Tienda</string>
     <string name="op_mis_favoritos_c">Favoritos</string>
+    <string name="op_carrito_c">Carrito</string>
     <string name="op_mis_ordenes_c">Mis órdenes</string>
 
     <!--Registro de vendedor-->
@@ -62,8 +63,11 @@
     <string name="Categoria">Categoría</string>
     <string name="etPrecioP">Precio</string>
     <string name="txtDescuento">Descuento</string>
-    <string name="etPrecioConDescuentoP">Precio con descuento apli.</string>
+    <string name="etPorcentajeDescuentoP">Ingrese porcentaje de desc.</string>
+    <string name="etPrecioConDescuentoP"></string>
     <string name="etNotaDescuentoP">Ejm: 10% Desc.</string>
+    <string name="btnCalcularPrecioDesc">Calcular</string>
+    <string name="precioConDescuentoPTXT">Precio con descuento aplicado:</string>
     <string name="btnAgregarProducto">Agregar producto</string>
 
     <!--Categoría-->
@@ -106,10 +110,22 @@
     <string name="precioDescPD">00</string>
     <string name="notaDescuentoPD">Ejm: 10% Desc.</string>
 
+    <!--Carrito de compras-->
+    <string name="nombrePCar">Nombre del producto</string>
+    <string name="descripcionPCar">Descripción</string>
+    <string name="notaDescPCar">10% OFF</string>
+    <string name="precioOriginalPCar">00</string>
+    <string name="precioDescPCar">00</string>
+    <string name="cantidadPCar">1</string>
+    <string name="precioFinalPCar">00</string>
+    <string name="btnAgregarCarrito">Agregar al carrito</string>
+
     <string name="imagenContadorTV">1/5</string>
 
     <!--Zoom a la imagen-->
     <string name="cerrarZoom">Cerrar</string>
+
+    <string name="sumaProductos">Suma productos</string>
 
     <string name="txt_bienvenido">Bienvenido(a)</string>
     <!-- TODO: Remove or change this placeholder text -->

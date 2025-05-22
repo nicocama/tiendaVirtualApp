@@ -21,6 +21,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <ImageButton
+            android:id="@+id/btnAgregarProducto"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icono_subir_producto"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -30,7 +40,7 @@
     
     <RelativeLayout
         android:id="@+id/RLImagen"
-        android:layout_below="@+id/toolbarRL"
+        android:layout_below="@id/toolbarRL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -66,7 +76,7 @@
             <!--Nombres del producto-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TIL_NombresP"
-                android:layout_below="@+id/RV_ImagenesProducto"
+                android:layout_below="@id/RV_ImagenesProducto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -82,7 +92,7 @@
             <!--Descripción-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TIL_DescripcionP"
-                android:layout_below="@+id/TIL_NombresP"
+                android:layout_below="@id/TIL_NombresP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -105,14 +115,14 @@
                 android:gravity="center_vertical"
                 app:drawableEndCompat = "@drawable/icono_menu_categoria"
                 android:background="@drawable/custom_edittext"
-                android:layout_below="@+id/TIL_DescripcionP"
+                android:layout_below="@id/TIL_DescripcionP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <!--Precio-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TIL_Precio"
-                android:layout_below="@+id/Categoria"
+                android:layout_below="@id/Categoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -129,31 +139,16 @@
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/descuentoSwitch"
                 android:text="@string/txtDescuento"
-                android:layout_below="@+id/TIL_Precio"
+                android:layout_below="@id/TIL_Precio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"/>
 
-            <!--Precio con descuento aplicado-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/TIL_PrecioDes"
-                android:layout_below="@+id/descuentoSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/etPrecioConDescuentoP"
-                    android:hint="@string/etPrecioConDescuentoP"
-                    android:inputType="numberDecimal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!--Nota del descuento-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TIL_NotaDesc"
-                android:layout_below="@+id/TIL_PrecioDes"
+                android:layout_below="@id/descuentoSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -166,18 +161,61 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--Determinar el porcentaje de descuento-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TIL_PorcentajeDesc"
+                android:layout_below="@id/TIL_NotaDesc"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etPorcentajeDescuentoP"
+                    android:hint="@string/etPorcentajeDescuentoP"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--btn Calcular descuento-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCalcularPrecioDesc"
+                android:text="@string/btnCalcularPrecioDesc"
+                app:cornerRadius="8dp"
+                android:layout_below="@id/TIL_PorcentajeDesc"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:textAllCaps="true"
+                app:icon="@drawable/icono_calcular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/precioConDescuentoPTXT"
+                android:text="@string/precioConDescuentoPTXT"
+                android:layout_below="@id/btnCalcularPrecioDesc"
+                android:layout_marginTop="10dp"
+                android:textColor="#000"
+                android:textSize="17sp"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!--Precio con descuento aplicado-->
+            <TextView
+                android:id="@+id/etPrecioConDescuentoP"
+                android:text="@string/etPrecioConDescuentoP"
+                android:layout_below="@id/precioConDescuentoPTXT"
+                android:layout_marginTop="10dp"
+                android:textColor="#000"
+                android:textSize="17sp"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
-    <!--Botón agregar producto-->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAgregarProducto"
-        android:text="@string/btnAgregarProducto"
-        android:layout_alignParentBottom="true"
-        android:textAllCaps="true"
-        android:layout_margin="20dp"
-        app:cornerRadius="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

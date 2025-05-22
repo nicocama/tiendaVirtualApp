@@ -46,16 +46,25 @@ class AgregarProductoActivity : AppCompatActivity() {
         progressDialog.setTitle("Espere por favor")
         progressDialog.setCanceledOnTouchOutside(false)
 
+        binding.etPorcentajeDescuentoP.visibility = View.GONE
+        binding.btnCalcularPrecioDesc.visibility = View.GONE
+        binding.precioConDescuentoPTXT.visibility = View.GONE
         binding.etPrecioConDescuentoP.visibility = View.GONE
         binding.etNotaDescuentoP.visibility = View.GONE
 
         binding.descuentoSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
                 //Si Switch está habilitado mostrará los campos
+                binding.etPorcentajeDescuentoP.visibility = View.VISIBLE
+                binding.btnCalcularPrecioDesc.visibility = View.VISIBLE
+                binding.precioConDescuentoPTXT.visibility = View.VISIBLE
                 binding.etPrecioConDescuentoP.visibility = View.VISIBLE
                 binding.etNotaDescuentoP.visibility = View.VISIBLE
             }else{
                 //Si Switch está deshabilitado no mostrará los campos
+                binding.etPorcentajeDescuentoP.visibility = View.GONE
+                binding.btnCalcularPrecioDesc.visibility = View.GONE
+                binding.precioConDescuentoPTXT.visibility = View.GONE
                 binding.etPrecioConDescuentoP.visibility = View.GONE
                 binding.etNotaDescuentoP.visibility = View.GONE
             }
@@ -72,12 +81,36 @@ class AgregarProductoActivity : AppCompatActivity() {
             selecCategorias()
         }
 
+        binding.btnCalcularPrecioDesc.setOnClickListener{
+            calcularPrecioDesc()
+        }
+
         binding.btnAgregarProducto.setOnClickListener{
             validarInfo()
         }
 
         cargarImagenes()
 
+    }
+
+    private fun calcularPrecioDesc() {
+        val precioOriginal = binding.etPrecioP.text.toString()
+        val notaDescuento = binding.etNotaDescuentoP.text.toString()
+        val porcentaje = binding.etPorcentajeDescuentoP.text.toString()
+
+        if (precioOriginal.isEmpty()){
+            Toast.makeText(this, "Ingrese el precio original",Toast.LENGTH_SHORT).show()
+        }else if (notaDescuento.isEmpty()){
+            Toast.makeText(this, "Ingrese la nota con descuento",Toast.LENGTH_SHORT).show()
+        }else if (porcentaje.isEmpty()){
+            Toast.makeText(this, "Ingrese el porcentaje del descuento a aplicar",Toast.LENGTH_SHORT).show()
+        }else{
+            val precioOriginalDouble = precioOriginal.toDouble()
+            val porcentajeDouble = porcentaje.toDouble()
+            val descuento = precioOriginalDouble*(porcentajeDouble/100) //Obtenemos el descuento
+            val precioDescAplicado = (precioOriginalDouble - descuento) //Precio con descuento
+            binding.etPrecioConDescuentoP.text = precioDescAplicado.toInt().toString()
+        }
     }
 
     private var nombreP = ""
@@ -87,7 +120,7 @@ class AgregarProductoActivity : AppCompatActivity() {
     private var descuentoHab = false
     private var precioDescP = ""
     private var notaDescP = ""
-
+    private var porcentajeDescP = ""
     private fun validarInfo() {
         nombreP = binding.etNombresP.text.toString().trim()
         descripcionP = binding.etDescripcion.text.toString().trim()
@@ -116,14 +149,18 @@ class AgregarProductoActivity : AppCompatActivity() {
         }else{
             //Cuando descuento es true
             if (descuentoHab){
-                precioDescP = binding.etPrecioConDescuentoP.text.toString().trim()
                 notaDescP = binding.etNotaDescuentoP.text.toString().trim()
-                if (precioDescP.isEmpty()){
-                    binding.etPrecioConDescuentoP.error = "Ingrese precio con desc."
-                    binding.etPrecioConDescuentoP.requestFocus()
-                }else if (notaDescP.isEmpty()){
-                    binding.etNotaDescuentoP.text.toString().trim()
+                porcentajeDescP = binding.etPorcentajeDescuentoP.text.toString().trim()
+                precioDescP = binding.etPrecioConDescuentoP.text.toString().trim()
+
+                if (notaDescP.isEmpty()) {
+                    binding.etNotaDescuentoP.error = "Ingrese una nota"
                     binding.etNotaDescuentoP.requestFocus()
+                }else if (porcentajeDescP.isEmpty()){
+                    binding.etPorcentajeDescuentoP.error = "Ingrese un porcentaje"
+                    binding.etPorcentajeDescuentoP.requestFocus()
+                } else if (precioDescP.isEmpty()){
+                    binding.etPrecioConDescuentoP.setText("No se estableció el precio con descuento")
                 }else{
                     agregarProducto()
                 }
@@ -210,8 +247,10 @@ class AgregarProductoActivity : AppCompatActivity() {
         binding.etPrecioP.setText("")
         binding.Categoria.setText("")
         binding.descuentoSwitch.isChecked = false
-        binding.etPrecioConDescuentoP.setText("")
         binding.etNotaDescuentoP.setText("")
+        binding.etPorcentajeDescuentoP.setText("")
+        binding.etPrecioConDescuentoP.setText("")
+
     }
 
     private fun cargarCategoria() {

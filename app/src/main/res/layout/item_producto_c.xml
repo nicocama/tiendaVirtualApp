@@ -14,7 +14,7 @@
         android:padding="7dp">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <!--Nota del descuento-->
@@ -42,7 +42,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imagenP"
             android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_height="180dp"
             android:src="@drawable/item_img_producto"
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
